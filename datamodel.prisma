@@ -1,0 +1,29 @@
+type User {
+  id: ID! @unique
+  name: String
+  email: String @unique
+  password: String!
+  phoneNumber: String @unique
+  posts: [Post!]! @relation(name: "PostsOfUser", onDelete: CASCADE)
+  followers: [User!]! @relation(name: "Followers")
+  following: [User!]! @relation(name: "Following")
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Post {
+  id: ID! @unique
+  user: User! @relation(name: "PostsOfUser", onDelete: CASCADE)
+  body: String!
+  mediaUrl: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deleted: Boolean! @default(value: "false")
+}
+
+type Token {
+  token: String! @unique
+  exp: String!
+  iat: String!
+  blacklisted: Boolean! @default(value: "false")
+}

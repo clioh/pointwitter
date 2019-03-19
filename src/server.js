@@ -5,6 +5,7 @@ const { PubSub } = require('apollo-server');
 
 const { prisma } = require('../generated/prisma-client');
 const { typeDefs } = require('./schema');
+
 const { resolvers } = require('./resolvers');
 const { getUserID } = require('./utils');
 
@@ -16,6 +17,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   // Add Prisma to the context as we'll be using that all over
+  // Also add pubsub as we need an instance of that in a few places
   context: request => ({
     ...request,
     pubsub,

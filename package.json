@@ -9,7 +9,7 @@
   "scripts": {
     "create-env": "node create-env.js",
     "start": "yarn create-env && micro src/server.js",
-    "dev": "micro-dev"
+    "dev": "yarn create-env && micro-dev"
   },
   "dependencies": {
     "apollo-server": "^2.4.8",

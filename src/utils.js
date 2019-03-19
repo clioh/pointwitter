@@ -21,7 +21,7 @@ async function getUserID(context) {
 
     /* Since we want to explcitly let individual log out, we need to save a
     black-list to reference when we get a token.
-    // Even though JWT's are supposed to be stateless, this is the best way to do this.
+    Even though JWT's are supposed to be stateless, this is the best way to do this.
     Luckily the operation is O(1) since it's a hash table */
     const blacklisted = await tokenBlacklisted(prisma, token);
     if (blacklisted) {

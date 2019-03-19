@@ -14,12 +14,19 @@ const Mutation = {
     if (!email && !phoneNumber) {
       return UserInputError('Must register with either email or phone number');
     }
+
     /* For the sake of consistency here, we're going to strip out
     everything but digits from the phone number */
-    const phoneNumberFormatted = phoneNumber.replace(/[^0-9]/, '');
+    let phoneNumberFormatted;
+    if (phoneNumber) {
+      phoneNumberFormatted = phoneNumber.replace(/\D/g, '');
+      if (phoneNumberFormatted === '') {
+        throw new UserInputError('Invalid phone number');
+      }
+    }
 
     const emailExists = await prisma.$exists.user({ email });
-    const phoneNumberExists = prisma.$exists.user({ phoneNumberFormatted });
+    const phoneNumberExists = await prisma.$exists.user({ phoneNumber: phoneNumberFormatted });
     if (email && emailExists) {
       throw new UserInputError('User already exists');
     }
@@ -65,7 +72,7 @@ const Mutation = {
     } else if (phoneNumber) {
       /* We'd most likely have front-end send up a property formatted phone number,
       but it doesn't hurt to double-check here */
-      const phoneNumberFormatted = phoneNumber.replace(/[^0-9]/, '');
+      const phoneNumberFormatted = phoneNumber.replace(/\D/g, '');
       user = await prisma.user({ phoneNumber: phoneNumberFormatted });
     }
 

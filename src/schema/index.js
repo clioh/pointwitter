@@ -10,7 +10,6 @@ const typeDefs = gql`
     posts: [Post!]!
     followers: [User!]!
     following: [User!]!
-    blocked: [User!]!
     createdAt: String!
     updatedAt: String!
     lastLogin: String!
@@ -43,25 +42,17 @@ const typeDefs = gql`
   }
 
   type Query {
-    posts(userID: ID!): [Post]!
-    feed: [Post]!
+    user(email: String, name: String, phoneNumber: String): [User]!
+    posts(userID: ID!, skip: Int, first: Int): [Post]!
+    feed(skip: Int, first: Int): [Post]!
   }
 
   type Mutation {
-    signup(
-      email: String
-      password: String!
-      phoneNumber: String
-      name: String
-    ): AuthPayload!
+    signup(email: String, password: String!, phoneNumber: String, name: String): AuthPayload!
     login(email: String, phoneNumber: String, password: String!): AuthPayload
     logout(userID: String): String!
     createPost(postBody: String!, upload: MediaUpload): Post!
-    updatePost(
-      postID: ID!
-      postUpdate: String!
-      uploadUpdate: MediaUpload
-    ): Post!
+    updatePost(postID: ID!, postUpdate: String!, uploadUpdate: MediaUpload): Post!
     deletePost(postID: ID!): Post!
     followUser(userID: ID!): User!
     unfollowUser(userID: ID!): User!

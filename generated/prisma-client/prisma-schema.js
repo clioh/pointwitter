@@ -65,6 +65,7 @@ type Post {
   id: ID!
   user: User!
   body: String!
+  mediaUrl: String
   createdAt: DateTime!
   updatedAt: DateTime!
   deleted: Boolean!
@@ -79,6 +80,7 @@ type PostConnection {
 input PostCreateInput {
   user: UserCreateOneWithoutPostsInput!
   body: String!
+  mediaUrl: String
   deleted: Boolean
 }
 
@@ -89,6 +91,7 @@ input PostCreateManyWithoutUserInput {
 
 input PostCreateWithoutUserInput {
   body: String!
+  mediaUrl: String
   deleted: Boolean
 }
 
@@ -102,6 +105,8 @@ enum PostOrderByInput {
   id_DESC
   body_ASC
   body_DESC
+  mediaUrl_ASC
+  mediaUrl_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -113,6 +118,7 @@ enum PostOrderByInput {
 type PostPreviousValues {
   id: ID!
   body: String!
+  mediaUrl: String
   createdAt: DateTime!
   updatedAt: DateTime!
   deleted: Boolean!
@@ -147,6 +153,20 @@ input PostScalarWhereInput {
   body_not_starts_with: String
   body_ends_with: String
   body_not_ends_with: String
+  mediaUrl: String
+  mediaUrl_not: String
+  mediaUrl_in: [String!]
+  mediaUrl_not_in: [String!]
+  mediaUrl_lt: String
+  mediaUrl_lte: String
+  mediaUrl_gt: String
+  mediaUrl_gte: String
+  mediaUrl_contains: String
+  mediaUrl_not_contains: String
+  mediaUrl_starts_with: String
+  mediaUrl_not_starts_with: String
+  mediaUrl_ends_with: String
+  mediaUrl_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -191,16 +211,19 @@ input PostSubscriptionWhereInput {
 input PostUpdateInput {
   user: UserUpdateOneRequiredWithoutPostsInput
   body: String
+  mediaUrl: String
   deleted: Boolean
 }
 
 input PostUpdateManyDataInput {
   body: String
+  mediaUrl: String
   deleted: Boolean
 }
 
 input PostUpdateManyMutationInput {
   body: String
+  mediaUrl: String
   deleted: Boolean
 }
 
@@ -223,6 +246,7 @@ input PostUpdateManyWithWhereNestedInput {
 
 input PostUpdateWithoutUserDataInput {
   body: String
+  mediaUrl: String
   deleted: Boolean
 }
 
@@ -267,6 +291,20 @@ input PostWhereInput {
   body_not_starts_with: String
   body_ends_with: String
   body_not_ends_with: String
+  mediaUrl: String
+  mediaUrl_not: String
+  mediaUrl_in: [String!]
+  mediaUrl_not_in: [String!]
+  mediaUrl_lt: String
+  mediaUrl_lte: String
+  mediaUrl_gt: String
+  mediaUrl_gte: String
+  mediaUrl_contains: String
+  mediaUrl_not_contains: String
+  mediaUrl_starts_with: String
+  mediaUrl_not_starts_with: String
+  mediaUrl_ends_with: String
+  mediaUrl_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -315,8 +353,8 @@ type Subscription {
 
 type Token {
   token: String!
-  exp: String!
-  iat: String!
+  exp: DateTime!
+  iat: DateTime!
   blacklisted: Boolean!
 }
 
@@ -328,8 +366,8 @@ type TokenConnection {
 
 input TokenCreateInput {
   token: String!
-  exp: String!
-  iat: String!
+  exp: DateTime!
+  iat: DateTime!
   blacklisted: Boolean
 }
 
@@ -357,8 +395,8 @@ enum TokenOrderByInput {
 
 type TokenPreviousValues {
   token: String!
-  exp: String!
-  iat: String!
+  exp: DateTime!
+  iat: DateTime!
   blacklisted: Boolean!
 }
 
@@ -382,15 +420,15 @@ input TokenSubscriptionWhereInput {
 
 input TokenUpdateInput {
   token: String
-  exp: String
-  iat: String
+  exp: DateTime
+  iat: DateTime
   blacklisted: Boolean
 }
 
 input TokenUpdateManyMutationInput {
   token: String
-  exp: String
-  iat: String
+  exp: DateTime
+  iat: DateTime
   blacklisted: Boolean
 }
 
@@ -409,34 +447,22 @@ input TokenWhereInput {
   token_not_starts_with: String
   token_ends_with: String
   token_not_ends_with: String
-  exp: String
-  exp_not: String
-  exp_in: [String!]
-  exp_not_in: [String!]
-  exp_lt: String
-  exp_lte: String
-  exp_gt: String
-  exp_gte: String
-  exp_contains: String
-  exp_not_contains: String
-  exp_starts_with: String
-  exp_not_starts_with: String
-  exp_ends_with: String
-  exp_not_ends_with: String
-  iat: String
-  iat_not: String
-  iat_in: [String!]
-  iat_not_in: [String!]
-  iat_lt: String
-  iat_lte: String
-  iat_gt: String
-  iat_gte: String
-  iat_contains: String
-  iat_not_contains: String
-  iat_starts_with: String
-  iat_not_starts_with: String
-  iat_ends_with: String
-  iat_not_ends_with: String
+  exp: DateTime
+  exp_not: DateTime
+  exp_in: [DateTime!]
+  exp_not_in: [DateTime!]
+  exp_lt: DateTime
+  exp_lte: DateTime
+  exp_gt: DateTime
+  exp_gte: DateTime
+  iat: DateTime
+  iat_not: DateTime
+  iat_in: [DateTime!]
+  iat_not_in: [DateTime!]
+  iat_lt: DateTime
+  iat_lte: DateTime
+  iat_gt: DateTime
+  iat_gte: DateTime
   blacklisted: Boolean
   blacklisted_not: Boolean
   AND: [TokenWhereInput!]
@@ -457,10 +483,8 @@ type User {
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
   followers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   following(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
-  blocked(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   createdAt: DateTime!
   updatedAt: DateTime!
-  lastLogin: DateTime
 }
 
 type UserConnection {
@@ -477,13 +501,6 @@ input UserCreateInput {
   posts: PostCreateManyWithoutUserInput
   followers: UserCreateManyWithoutFollowersInput
   following: UserCreateManyWithoutFollowingInput
-  blocked: UserCreateManyWithoutBlockedInput
-  lastLogin: DateTime
-}
-
-input UserCreateManyWithoutBlockedInput {
-  create: [UserCreateWithoutBlockedInput!]
-  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateManyWithoutFollowersInput {
@@ -501,17 +518,6 @@ input UserCreateOneWithoutPostsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateWithoutBlockedInput {
-  name: String
-  email: String
-  password: String!
-  phoneNumber: String
-  posts: PostCreateManyWithoutUserInput
-  followers: UserCreateManyWithoutFollowersInput
-  following: UserCreateManyWithoutFollowingInput
-  lastLogin: DateTime
-}
-
 input UserCreateWithoutFollowersInput {
   name: String
   email: String
@@ -519,8 +525,6 @@ input UserCreateWithoutFollowersInput {
   phoneNumber: String
   posts: PostCreateManyWithoutUserInput
   following: UserCreateManyWithoutFollowingInput
-  blocked: UserCreateManyWithoutBlockedInput
-  lastLogin: DateTime
 }
 
 input UserCreateWithoutFollowingInput {
@@ -530,8 +534,6 @@ input UserCreateWithoutFollowingInput {
   phoneNumber: String
   posts: PostCreateManyWithoutUserInput
   followers: UserCreateManyWithoutFollowersInput
-  blocked: UserCreateManyWithoutBlockedInput
-  lastLogin: DateTime
 }
 
 input UserCreateWithoutPostsInput {
@@ -541,8 +543,6 @@ input UserCreateWithoutPostsInput {
   phoneNumber: String
   followers: UserCreateManyWithoutFollowersInput
   following: UserCreateManyWithoutFollowingInput
-  blocked: UserCreateManyWithoutBlockedInput
-  lastLogin: DateTime
 }
 
 type UserEdge {
@@ -565,8 +565,6 @@ enum UserOrderByInput {
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
-  lastLogin_ASC
-  lastLogin_DESC
 }
 
 type UserPreviousValues {
@@ -577,7 +575,6 @@ type UserPreviousValues {
   phoneNumber: String
   createdAt: DateTime!
   updatedAt: DateTime!
-  lastLogin: DateTime
 }
 
 input UserScalarWhereInput {
@@ -667,14 +664,6 @@ input UserScalarWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
-  lastLogin: DateTime
-  lastLogin_not: DateTime
-  lastLogin_in: [DateTime!]
-  lastLogin_not_in: [DateTime!]
-  lastLogin_lt: DateTime
-  lastLogin_lte: DateTime
-  lastLogin_gt: DateTime
-  lastLogin_gte: DateTime
   AND: [UserScalarWhereInput!]
   OR: [UserScalarWhereInput!]
   NOT: [UserScalarWhereInput!]
@@ -706,8 +695,6 @@ input UserUpdateInput {
   posts: PostUpdateManyWithoutUserInput
   followers: UserUpdateManyWithoutFollowersInput
   following: UserUpdateManyWithoutFollowingInput
-  blocked: UserUpdateManyWithoutBlockedInput
-  lastLogin: DateTime
 }
 
 input UserUpdateManyDataInput {
@@ -715,7 +702,6 @@ input UserUpdateManyDataInput {
   email: String
   password: String
   phoneNumber: String
-  lastLogin: DateTime
 }
 
 input UserUpdateManyMutationInput {
@@ -723,19 +709,6 @@ input UserUpdateManyMutationInput {
   email: String
   password: String
   phoneNumber: String
-  lastLogin: DateTime
-}
-
-input UserUpdateManyWithoutBlockedInput {
-  create: [UserCreateWithoutBlockedInput!]
-  delete: [UserWhereUniqueInput!]
-  connect: [UserWhereUniqueInput!]
-  set: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutBlockedInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutBlockedInput!]
-  deleteMany: [UserScalarWhereInput!]
-  updateMany: [UserUpdateManyWithWhereNestedInput!]
 }
 
 input UserUpdateManyWithoutFollowersInput {
@@ -774,17 +747,6 @@ input UserUpdateOneRequiredWithoutPostsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateWithoutBlockedDataInput {
-  name: String
-  email: String
-  password: String
-  phoneNumber: String
-  posts: PostUpdateManyWithoutUserInput
-  followers: UserUpdateManyWithoutFollowersInput
-  following: UserUpdateManyWithoutFollowingInput
-  lastLogin: DateTime
-}
-
 input UserUpdateWithoutFollowersDataInput {
   name: String
   email: String
@@ -792,8 +754,6 @@ input UserUpdateWithoutFollowersDataInput {
   phoneNumber: String
   posts: PostUpdateManyWithoutUserInput
   following: UserUpdateManyWithoutFollowingInput
-  blocked: UserUpdateManyWithoutBlockedInput
-  lastLogin: DateTime
 }
 
 input UserUpdateWithoutFollowingDataInput {
@@ -803,8 +763,6 @@ input UserUpdateWithoutFollowingDataInput {
   phoneNumber: String
   posts: PostUpdateManyWithoutUserInput
   followers: UserUpdateManyWithoutFollowersInput
-  blocked: UserUpdateManyWithoutBlockedInput
-  lastLogin: DateTime
 }
 
 input UserUpdateWithoutPostsDataInput {
@@ -814,13 +772,6 @@ input UserUpdateWithoutPostsDataInput {
   phoneNumber: String
   followers: UserUpdateManyWithoutFollowersInput
   following: UserUpdateManyWithoutFollowingInput
-  blocked: UserUpdateManyWithoutBlockedInput
-  lastLogin: DateTime
-}
-
-input UserUpdateWithWhereUniqueWithoutBlockedInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateWithoutBlockedDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutFollowersInput {
@@ -836,12 +787,6 @@ input UserUpdateWithWhereUniqueWithoutFollowingInput {
 input UserUpsertWithoutPostsInput {
   update: UserUpdateWithoutPostsDataInput!
   create: UserCreateWithoutPostsInput!
-}
-
-input UserUpsertWithWhereUniqueWithoutBlockedInput {
-  where: UserWhereUniqueInput!
-  update: UserUpdateWithoutBlockedDataInput!
-  create: UserCreateWithoutBlockedInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutFollowersInput {
@@ -936,9 +881,6 @@ input UserWhereInput {
   following_every: UserWhereInput
   following_some: UserWhereInput
   following_none: UserWhereInput
-  blocked_every: UserWhereInput
-  blocked_some: UserWhereInput
-  blocked_none: UserWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -955,14 +897,6 @@ input UserWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
-  lastLogin: DateTime
-  lastLogin_not: DateTime
-  lastLogin_in: [DateTime!]
-  lastLogin_not_in: [DateTime!]
-  lastLogin_lt: DateTime
-  lastLogin_lte: DateTime
-  lastLogin_gt: DateTime
-  lastLogin_gte: DateTime
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

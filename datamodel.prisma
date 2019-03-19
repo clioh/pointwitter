@@ -23,7 +23,7 @@ type Post {
 
 type Token {
   token: String! @unique
-  exp: String!
-  iat: String!
+  exp: DateTime!
+  iat: DateTime!
   blacklisted: Boolean! @default(value: "false")
 }

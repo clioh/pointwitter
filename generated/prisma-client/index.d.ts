@@ -194,6 +194,8 @@ export type PostOrderByInput =
   | "id_DESC"
   | "body_ASC"
   | "body_DESC"
+  | "mediaUrl_ASC"
+  | "mediaUrl_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -215,9 +217,7 @@ export type UserOrderByInput =
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "lastLogin_ASC"
-  | "lastLogin_DESC";
+  | "updatedAt_DESC";
 
 export type TokenOrderByInput =
   | "token_ASC"
@@ -271,6 +271,20 @@ export interface PostWhereInput {
   body_not_starts_with?: String;
   body_ends_with?: String;
   body_not_ends_with?: String;
+  mediaUrl?: String;
+  mediaUrl_not?: String;
+  mediaUrl_in?: String[] | String;
+  mediaUrl_not_in?: String[] | String;
+  mediaUrl_lt?: String;
+  mediaUrl_lte?: String;
+  mediaUrl_gt?: String;
+  mediaUrl_gte?: String;
+  mediaUrl_contains?: String;
+  mediaUrl_not_contains?: String;
+  mediaUrl_starts_with?: String;
+  mediaUrl_not_starts_with?: String;
+  mediaUrl_ends_with?: String;
+  mediaUrl_not_ends_with?: String;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -374,9 +388,6 @@ export interface UserWhereInput {
   following_every?: UserWhereInput;
   following_some?: UserWhereInput;
   following_none?: UserWhereInput;
-  blocked_every?: UserWhereInput;
-  blocked_some?: UserWhereInput;
-  blocked_none?: UserWhereInput;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -393,14 +404,6 @@ export interface UserWhereInput {
   updatedAt_lte?: DateTimeInput;
   updatedAt_gt?: DateTimeInput;
   updatedAt_gte?: DateTimeInput;
-  lastLogin?: DateTimeInput;
-  lastLogin_not?: DateTimeInput;
-  lastLogin_in?: DateTimeInput[] | DateTimeInput;
-  lastLogin_not_in?: DateTimeInput[] | DateTimeInput;
-  lastLogin_lt?: DateTimeInput;
-  lastLogin_lte?: DateTimeInput;
-  lastLogin_gt?: DateTimeInput;
-  lastLogin_gte?: DateTimeInput;
   AND?: UserWhereInput[] | UserWhereInput;
   OR?: UserWhereInput[] | UserWhereInput;
   NOT?: UserWhereInput[] | UserWhereInput;
@@ -425,34 +428,22 @@ export interface TokenWhereInput {
   token_not_starts_with?: String;
   token_ends_with?: String;
   token_not_ends_with?: String;
-  exp?: String;
-  exp_not?: String;
-  exp_in?: String[] | String;
-  exp_not_in?: String[] | String;
-  exp_lt?: String;
-  exp_lte?: String;
-  exp_gt?: String;
-  exp_gte?: String;
-  exp_contains?: String;
-  exp_not_contains?: String;
-  exp_starts_with?: String;
-  exp_not_starts_with?: String;
-  exp_ends_with?: String;
-  exp_not_ends_with?: String;
-  iat?: String;
-  iat_not?: String;
-  iat_in?: String[] | String;
-  iat_not_in?: String[] | String;
-  iat_lt?: String;
-  iat_lte?: String;
-  iat_gt?: String;
-  iat_gte?: String;
-  iat_contains?: String;
-  iat_not_contains?: String;
-  iat_starts_with?: String;
-  iat_not_starts_with?: String;
-  iat_ends_with?: String;
-  iat_not_ends_with?: String;
+  exp?: DateTimeInput;
+  exp_not?: DateTimeInput;
+  exp_in?: DateTimeInput[] | DateTimeInput;
+  exp_not_in?: DateTimeInput[] | DateTimeInput;
+  exp_lt?: DateTimeInput;
+  exp_lte?: DateTimeInput;
+  exp_gt?: DateTimeInput;
+  exp_gte?: DateTimeInput;
+  iat?: DateTimeInput;
+  iat_not?: DateTimeInput;
+  iat_in?: DateTimeInput[] | DateTimeInput;
+  iat_not_in?: DateTimeInput[] | DateTimeInput;
+  iat_lt?: DateTimeInput;
+  iat_lte?: DateTimeInput;
+  iat_gt?: DateTimeInput;
+  iat_gte?: DateTimeInput;
   blacklisted?: Boolean;
   blacklisted_not?: Boolean;
   AND?: TokenWhereInput[] | TokenWhereInput;
@@ -469,6 +460,7 @@ export type UserWhereUniqueInput = AtLeastOne<{
 export interface PostCreateInput {
   user: UserCreateOneWithoutPostsInput;
   body: String;
+  mediaUrl?: String;
   deleted?: Boolean;
 }
 
@@ -484,8 +476,6 @@ export interface UserCreateWithoutPostsInput {
   phoneNumber?: String;
   followers?: UserCreateManyWithoutFollowersInput;
   following?: UserCreateManyWithoutFollowingInput;
-  blocked?: UserCreateManyWithoutBlockedInput;
-  lastLogin?: DateTimeInput;
 }
 
 export interface UserCreateManyWithoutFollowersInput {
@@ -500,8 +490,6 @@ export interface UserCreateWithoutFollowersInput {
   phoneNumber?: String;
   posts?: PostCreateManyWithoutUserInput;
   following?: UserCreateManyWithoutFollowingInput;
-  blocked?: UserCreateManyWithoutBlockedInput;
-  lastLogin?: DateTimeInput;
 }
 
 export interface PostCreateManyWithoutUserInput {
@@ -511,6 +499,7 @@ export interface PostCreateManyWithoutUserInput {
 
 export interface PostCreateWithoutUserInput {
   body: String;
+  mediaUrl?: String;
   deleted?: Boolean;
 }
 
@@ -526,29 +515,12 @@ export interface UserCreateWithoutFollowingInput {
   phoneNumber?: String;
   posts?: PostCreateManyWithoutUserInput;
   followers?: UserCreateManyWithoutFollowersInput;
-  blocked?: UserCreateManyWithoutBlockedInput;
-  lastLogin?: DateTimeInput;
-}
-
-export interface UserCreateManyWithoutBlockedInput {
-  create?: UserCreateWithoutBlockedInput[] | UserCreateWithoutBlockedInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-}
-
-export interface UserCreateWithoutBlockedInput {
-  name?: String;
-  email?: String;
-  password: String;
-  phoneNumber?: String;
-  posts?: PostCreateManyWithoutUserInput;
-  followers?: UserCreateManyWithoutFollowersInput;
-  following?: UserCreateManyWithoutFollowingInput;
-  lastLogin?: DateTimeInput;
 }
 
 export interface PostUpdateInput {
   user?: UserUpdateOneRequiredWithoutPostsInput;
   body?: String;
+  mediaUrl?: String;
   deleted?: Boolean;
 }
 
@@ -566,8 +538,6 @@ export interface UserUpdateWithoutPostsDataInput {
   phoneNumber?: String;
   followers?: UserUpdateManyWithoutFollowersInput;
   following?: UserUpdateManyWithoutFollowingInput;
-  blocked?: UserUpdateManyWithoutBlockedInput;
-  lastLogin?: DateTimeInput;
 }
 
 export interface UserUpdateManyWithoutFollowersInput {
@@ -600,8 +570,6 @@ export interface UserUpdateWithoutFollowersDataInput {
   phoneNumber?: String;
   posts?: PostUpdateManyWithoutUserInput;
   following?: UserUpdateManyWithoutFollowingInput;
-  blocked?: UserUpdateManyWithoutBlockedInput;
-  lastLogin?: DateTimeInput;
 }
 
 export interface PostUpdateManyWithoutUserInput {
@@ -629,6 +597,7 @@ export interface PostUpdateWithWhereUniqueWithoutUserInput {
 
 export interface PostUpdateWithoutUserDataInput {
   body?: String;
+  mediaUrl?: String;
   deleted?: Boolean;
 }
 
@@ -667,6 +636,20 @@ export interface PostScalarWhereInput {
   body_not_starts_with?: String;
   body_ends_with?: String;
   body_not_ends_with?: String;
+  mediaUrl?: String;
+  mediaUrl_not?: String;
+  mediaUrl_in?: String[] | String;
+  mediaUrl_not_in?: String[] | String;
+  mediaUrl_lt?: String;
+  mediaUrl_lte?: String;
+  mediaUrl_gt?: String;
+  mediaUrl_gte?: String;
+  mediaUrl_contains?: String;
+  mediaUrl_not_contains?: String;
+  mediaUrl_starts_with?: String;
+  mediaUrl_not_starts_with?: String;
+  mediaUrl_ends_with?: String;
+  mediaUrl_not_ends_with?: String;
   createdAt?: DateTimeInput;
   createdAt_not?: DateTimeInput;
   createdAt_in?: DateTimeInput[] | DateTimeInput;
@@ -697,6 +680,7 @@ export interface PostUpdateManyWithWhereNestedInput {
 
 export interface PostUpdateManyDataInput {
   body?: String;
+  mediaUrl?: String;
   deleted?: Boolean;
 }
 
@@ -730,48 +714,12 @@ export interface UserUpdateWithoutFollowingDataInput {
   phoneNumber?: String;
   posts?: PostUpdateManyWithoutUserInput;
   followers?: UserUpdateManyWithoutFollowersInput;
-  blocked?: UserUpdateManyWithoutBlockedInput;
-  lastLogin?: DateTimeInput;
 }
 
-export interface UserUpdateManyWithoutBlockedInput {
-  create?: UserCreateWithoutBlockedInput[] | UserCreateWithoutBlockedInput;
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  set?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
-  update?:
-    | UserUpdateWithWhereUniqueWithoutBlockedInput[]
-    | UserUpdateWithWhereUniqueWithoutBlockedInput;
-  upsert?:
-    | UserUpsertWithWhereUniqueWithoutBlockedInput[]
-    | UserUpsertWithWhereUniqueWithoutBlockedInput;
-  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
-  updateMany?:
-    | UserUpdateManyWithWhereNestedInput[]
-    | UserUpdateManyWithWhereNestedInput;
-}
-
-export interface UserUpdateWithWhereUniqueWithoutBlockedInput {
+export interface UserUpsertWithWhereUniqueWithoutFollowingInput {
   where: UserWhereUniqueInput;
-  data: UserUpdateWithoutBlockedDataInput;
-}
-
-export interface UserUpdateWithoutBlockedDataInput {
-  name?: String;
-  email?: String;
-  password?: String;
-  phoneNumber?: String;
-  posts?: PostUpdateManyWithoutUserInput;
-  followers?: UserUpdateManyWithoutFollowersInput;
-  following?: UserUpdateManyWithoutFollowingInput;
-  lastLogin?: DateTimeInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutBlockedInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutBlockedDataInput;
-  create: UserCreateWithoutBlockedInput;
+  update: UserUpdateWithoutFollowingDataInput;
+  create: UserCreateWithoutFollowingInput;
 }
 
 export interface UserScalarWhereInput {
@@ -861,14 +809,6 @@ export interface UserScalarWhereInput {
   updatedAt_lte?: DateTimeInput;
   updatedAt_gt?: DateTimeInput;
   updatedAt_gte?: DateTimeInput;
-  lastLogin?: DateTimeInput;
-  lastLogin_not?: DateTimeInput;
-  lastLogin_in?: DateTimeInput[] | DateTimeInput;
-  lastLogin_not_in?: DateTimeInput[] | DateTimeInput;
-  lastLogin_lt?: DateTimeInput;
-  lastLogin_lte?: DateTimeInput;
-  lastLogin_gt?: DateTimeInput;
-  lastLogin_gte?: DateTimeInput;
   AND?: UserScalarWhereInput[] | UserScalarWhereInput;
   OR?: UserScalarWhereInput[] | UserScalarWhereInput;
   NOT?: UserScalarWhereInput[] | UserScalarWhereInput;
@@ -884,13 +824,6 @@ export interface UserUpdateManyDataInput {
   email?: String;
   password?: String;
   phoneNumber?: String;
-  lastLogin?: DateTimeInput;
-}
-
-export interface UserUpsertWithWhereUniqueWithoutFollowingInput {
-  where: UserWhereUniqueInput;
-  update: UserUpdateWithoutFollowingDataInput;
-  create: UserCreateWithoutFollowingInput;
 }
 
 export interface UserUpsertWithWhereUniqueWithoutFollowersInput {
@@ -906,27 +839,28 @@ export interface UserUpsertWithoutPostsInput {
 
 export interface PostUpdateManyMutationInput {
   body?: String;
+  mediaUrl?: String;
   deleted?: Boolean;
 }
 
 export interface TokenCreateInput {
   token: String;
-  exp: String;
-  iat: String;
+  exp: DateTimeInput;
+  iat: DateTimeInput;
   blacklisted?: Boolean;
 }
 
 export interface TokenUpdateInput {
   token?: String;
-  exp?: String;
-  iat?: String;
+  exp?: DateTimeInput;
+  iat?: DateTimeInput;
   blacklisted?: Boolean;
 }
 
 export interface TokenUpdateManyMutationInput {
   token?: String;
-  exp?: String;
-  iat?: String;
+  exp?: DateTimeInput;
+  iat?: DateTimeInput;
   blacklisted?: Boolean;
 }
 
@@ -938,8 +872,6 @@ export interface UserCreateInput {
   posts?: PostCreateManyWithoutUserInput;
   followers?: UserCreateManyWithoutFollowersInput;
   following?: UserCreateManyWithoutFollowingInput;
-  blocked?: UserCreateManyWithoutBlockedInput;
-  lastLogin?: DateTimeInput;
 }
 
 export interface UserUpdateInput {
@@ -950,8 +882,6 @@ export interface UserUpdateInput {
   posts?: PostUpdateManyWithoutUserInput;
   followers?: UserUpdateManyWithoutFollowersInput;
   following?: UserUpdateManyWithoutFollowingInput;
-  blocked?: UserUpdateManyWithoutBlockedInput;
-  lastLogin?: DateTimeInput;
 }
 
 export interface UserUpdateManyMutationInput {
@@ -959,7 +889,6 @@ export interface UserUpdateManyMutationInput {
   email?: String;
   password?: String;
   phoneNumber?: String;
-  lastLogin?: DateTimeInput;
 }
 
 export interface PostSubscriptionWhereInput {
@@ -1002,6 +931,7 @@ export interface NodeNode {
 export interface Post {
   id: ID_Output;
   body: String;
+  mediaUrl?: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
   deleted: Boolean;
@@ -1011,6 +941,7 @@ export interface PostPromise extends Promise<Post>, Fragmentable {
   id: () => Promise<ID_Output>;
   user: <T = UserPromise>() => T;
   body: () => Promise<String>;
+  mediaUrl: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
   deleted: () => Promise<Boolean>;
@@ -1022,6 +953,7 @@ export interface PostSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   user: <T = UserSubscription>() => T;
   body: () => Promise<AsyncIterator<String>>;
+  mediaUrl: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   deleted: () => Promise<AsyncIterator<Boolean>>;
@@ -1035,7 +967,6 @@ export interface User {
   phoneNumber?: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
-  lastLogin?: DateTimeOutput;
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
@@ -1077,20 +1008,8 @@ export interface UserPromise extends Promise<User>, Fragmentable {
       last?: Int;
     }
   ) => T;
-  blocked: <T = FragmentableArray<User>>(
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
-  lastLogin: () => Promise<DateTimeOutput>;
 }
 
 export interface UserSubscription
@@ -1134,20 +1053,8 @@ export interface UserSubscription
       last?: Int;
     }
   ) => T;
-  blocked: <T = Promise<AsyncIterator<UserSubscription>>>(
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  lastLogin: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface PostConnection {
@@ -1229,15 +1136,15 @@ export interface AggregatePostSubscription
 
 export interface Token {
   token: String;
-  exp: String;
-  iat: String;
+  exp: DateTimeOutput;
+  iat: DateTimeOutput;
   blacklisted: Boolean;
 }
 
 export interface TokenPromise extends Promise<Token>, Fragmentable {
   token: () => Promise<String>;
-  exp: () => Promise<String>;
-  iat: () => Promise<String>;
+  exp: () => Promise<DateTimeOutput>;
+  iat: () => Promise<DateTimeOutput>;
   blacklisted: () => Promise<Boolean>;
 }
 
@@ -1245,8 +1152,8 @@ export interface TokenSubscription
   extends Promise<AsyncIterator<Token>>,
     Fragmentable {
   token: () => Promise<AsyncIterator<String>>;
-  exp: () => Promise<AsyncIterator<String>>;
-  iat: () => Promise<AsyncIterator<String>>;
+  exp: () => Promise<AsyncIterator<DateTimeOutput>>;
+  iat: () => Promise<AsyncIterator<DateTimeOutput>>;
   blacklisted: () => Promise<AsyncIterator<Boolean>>;
 }
 
@@ -1402,6 +1309,7 @@ export interface PostSubscriptionPayloadSubscription
 export interface PostPreviousValues {
   id: ID_Output;
   body: String;
+  mediaUrl?: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
   deleted: Boolean;
@@ -1412,6 +1320,7 @@ export interface PostPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   body: () => Promise<String>;
+  mediaUrl: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
   deleted: () => Promise<Boolean>;
@@ -1422,6 +1331,7 @@ export interface PostPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   body: () => Promise<AsyncIterator<String>>;
+  mediaUrl: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   deleted: () => Promise<AsyncIterator<Boolean>>;
@@ -1454,8 +1364,8 @@ export interface TokenSubscriptionPayloadSubscription
 
 export interface TokenPreviousValues {
   token: String;
-  exp: String;
-  iat: String;
+  exp: DateTimeOutput;
+  iat: DateTimeOutput;
   blacklisted: Boolean;
 }
 
@@ -1463,8 +1373,8 @@ export interface TokenPreviousValuesPromise
   extends Promise<TokenPreviousValues>,
     Fragmentable {
   token: () => Promise<String>;
-  exp: () => Promise<String>;
-  iat: () => Promise<String>;
+  exp: () => Promise<DateTimeOutput>;
+  iat: () => Promise<DateTimeOutput>;
   blacklisted: () => Promise<Boolean>;
 }
 
@@ -1472,8 +1382,8 @@ export interface TokenPreviousValuesSubscription
   extends Promise<AsyncIterator<TokenPreviousValues>>,
     Fragmentable {
   token: () => Promise<AsyncIterator<String>>;
-  exp: () => Promise<AsyncIterator<String>>;
-  iat: () => Promise<AsyncIterator<String>>;
+  exp: () => Promise<AsyncIterator<DateTimeOutput>>;
+  iat: () => Promise<AsyncIterator<DateTimeOutput>>;
   blacklisted: () => Promise<AsyncIterator<Boolean>>;
 }
 
@@ -1510,7 +1420,6 @@ export interface UserPreviousValues {
   phoneNumber?: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
-  lastLogin?: DateTimeOutput;
 }
 
 export interface UserPreviousValuesPromise
@@ -1523,7 +1432,6 @@ export interface UserPreviousValuesPromise
   phoneNumber: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
-  lastLogin: () => Promise<DateTimeOutput>;
 }
 
 export interface UserPreviousValuesSubscription
@@ -1536,7 +1444,6 @@ export interface UserPreviousValuesSubscription
   phoneNumber: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  lastLogin: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 /*

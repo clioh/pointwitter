@@ -4,7 +4,7 @@
 
 ## Overview
 
-This API has been hosted on Zeit's now platform. It can be found @ [pointwitter.clioharper.xyz](pointwitter.clioharper.xyz). Navigating there will allow you to use the GraphQL Playground and interact with the API in that manner. Introspection is also enabled for the purposes of this demo. You can navigate to the GraphQL and get a visual understanding of the API schema.
+This API has been hosted on Zeit's now platform. It can be found @ [pointwitter.clioharper.xyz](https://pointwitter.clioharper.xyz). Navigating there will allow you to use the GraphQL Playground and interact with the API in that manner. Introspection is also enabled for the purposes of this demo. You can navigate to the GraphQL and get a visual understanding of the API schema.
 
 ## Local Development
 
@@ -16,18 +16,18 @@ You'll need to have Node installed along with either `npm` or `yarn`
 
 Run `yarn install` to install all dependencies for the project.
 
-From there, you can run `yarn dev` to run the development server with hot reloading or you can run `yarn start` to start the server in development mode. The server is currently configured to expose the GraphQL playground in both modes
+From there, you can run `yarn dev` to run the development server with hot reloading or you can run `yarn start` to start the server in production mode. The server is currently configured to expose the GraphQL playground in both modes.
 
 ### Note
 
 Most endpoints for this API are protected. To access them, you'll need to include a token in the `Authorization` header or the request
 
-To obtain a token, you'll need to either register or login. You can take the token you receive and include it in the header. See the API notes below for more details
+To obtain a token, you'll need to either register or login. You can take the token you receive and include it in the header. See below for more details.
 
 ## API endpoints
 
 The API is configured to accept requests on the `/` endpoint.
-`GET` requests to this endpoint will show the GraphQL playground, while `POST` requests will allow use of the endpoint as normal
+`GET` requests to this endpoint will show the GraphQL playground, while `POST` requests will allow use of the endpoint as normal.
 
 ## GraphQL endpoints
 
@@ -66,6 +66,8 @@ Returns all posts from the users that a user is following.
 ### Mutations
 
 #### Signup
+
+##### Example
 
 Allows a user to register for an account with an email/password OR phoneNumber/password.
 

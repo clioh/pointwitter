@@ -1,7 +1,7 @@
 const { AuthenticationError } = require('apollo-server-micro');
 const jwt = require('jsonwebtoken');
 
-const APP_SECRET = 'GraphQL-is-aw3some';
+const { APP_SECRET } = process.env;
 
 async function tokenBlacklisted(prisma, token) {
   return prisma.$exists.token({ token, blacklisted: true });

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { ApolloServer, AuthenticationError } = require('apollo-server-micro');
 const micro = require('micro');
 const { router, get, post } = require('microrouter');

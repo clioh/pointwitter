@@ -216,18 +216,42 @@ _Requires authorization._
 
 ### Apollo Server
 
+Apollo Server is the server-side service maintained by Apollo, who is undoubtedly a leader in the graphQL revolution. I like Apollo Server because it easily integrates with the client side offerings that Apollo has as well. Furthermore, it lets me easily choose the framework I want to use, which in this case is Micro. More on that below.
+
+Apollo offers thorough documentation, which helps significantly, and it widely used by the community at large, meaning it is unlike to disappear in the next few years.
+
+The other tempting alternative to Apollo would be graphQL Yoga, which is maintained by Prisma. graphQL Yoga offers much the same thing in a slightly more opinionated framework. One of the disadvantages of it is that it requires you to use Express.
+
 ### Micro
+
+Micro is a small (as the name implies) Node framework from Zeit. I like it because it integrates well with Now, allowing me to prototype easily for small projects like this one. It is also tiny in size at less than one megabyte and less than 260 lines of code.
 
 ### JWT
 
+In this application, JWT's don't really confer any advantages. Their promise is to be a stateless means of authentication, but since we required an explicit logout function, we actually need to check against the database for every request anyways. This isn't a big deal as this check is O(1). The nice thing about JWT's is that they offer extensibility in the future should we want to keep building this app more. Frankly, there's a good argument against the way they're commonly used [here](http://cryto.net/~joepie91/blog/2016/06/13/stop-using-jwt-for-sessions/) but I think they're just fine as long as you avoid pitfalls.
+
 ### Prisma
+
+Prisma is definitely the future of databases for common applications. It's a graphQL ORM+ that allows you to bring your own database. The details behind this database are at the individuals discretion, which makes the framework flexible enough to scale relatively painlessly. In this case, I'm taking advantage of Prisma's own hosted database to remove the complications of spinning up my own. If I were to productionize this app, this would be removed before deployment.
 
 ## Improvements
 
-### Pagination on posts
-
 ### Reset password functionality
 
-### More testing
+When I was writing this app, I thought it would be more fun to create my own login functionality as opposed to using something out of the box. One of the piece of functionality that is missing is the ability to reset a forgotten password, which is pretty common. In order to do this, I'd need to add a password reset token to the user type and integrate and email and text message service, which would be not too difficult.
+
+### Rate limiting
+
+One of the nice things about bcrypt is that it hashes slowly, which makes it good for applications like this. This feature of the algorithm cannot take the place of smart rate limits on queries that prevent both accidental and malicious misuse of the API. [This](https://blog.apollographql.com/securing-your-graphql-api-from-malicious-queries-16130a324a6b) article my Max Stoiber is a good start when considering protecting your graphQL API against malicious use.
+
+### Logging
+
+There currently isn't any logging integrated with the service. In a production environment, logging and error reporting are must-haves.
+
+### Testing
+
+Testing is huge in ensuring that applications work consistently. The very next step I'd take if I were to continue this project is to create some integration tests to ensure everything works as it should.
 
 ### Dynamic video resizing
+
+While users can upload videos or images right now, only images are resized. In the future, I'd like to add the ability to resize videos as well.

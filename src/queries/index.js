@@ -2,14 +2,14 @@ const { UserInputError } = require('apollo-server-micro');
 const { getUserID } = require('../utils');
 
 const Queries = {
-  async posts(_, { userID }, { prisma }) {
+  async posts(_, { userID, skip, first }, { prisma }) {
     const userExists = await prisma.$exists.user({ id: userID });
     if (!userExists) {
       throw new UserInputError('No user with that ID');
     }
-    return prisma.user({ id: userID }).posts({ where: { deleted: false } });
+    return prisma.user({ id: userID }).posts({ where: { deleted: false }, skip, first });
   },
-  async feed(_, params, context) {
+  async feed(_, { skip, first }, context) {
     const { prisma } = context;
     const userID = await getUserID(context);
 
@@ -21,7 +21,21 @@ const Queries = {
         user: { id_in: followingIDs },
         deleted: false,
       },
+      skip,
+      first,
     });
+  },
+  async user(_, args, { prisma }) {
+    /* In order to let users specify multiple search params, we need to convert the
+    arguments into an array */
+    const argsArray = Object.keys(args).map((argKey) => {
+      // Deals with inconsistency in searching for phone numbers just like we did on mutations
+      if (argKey === 'phoneNumber') {
+        return { [argKey]: args[argKey].replace(/\D/g, '') };
+      }
+      return { [argKey]: args[argKey] };
+    });
+    return prisma.users({ where: { AND: argsArray } });
   },
 };
 

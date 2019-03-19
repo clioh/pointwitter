@@ -1,4 +1,6 @@
-const { withFilter } = require("apollo-server");
+const { withFilter } = require('apollo-server');
+
+const POST_ADDED = 'POST_ADDED';
 
 const Subscriptions = {
   postAdded: {
@@ -11,11 +13,11 @@ const Subscriptions = {
         const { context } = connection;
         const { following } = context;
         return !!following.find(
-          person => person.id === payload.postAdded.user.id
+          person => person.id === payload.postAdded.user.id,
         );
-      }
-    )
-  }
+      },
+    ),
+  },
 };
 
 module.exports = Subscriptions;

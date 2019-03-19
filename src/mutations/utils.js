@@ -1,27 +1,27 @@
-const sharp = require("sharp");
-const { PassThrough } = require("stream");
-const uploadFileToS3 = require("../../s3");
-const { UserInputError } = require("apollo-server-micro");
+const sharp = require('sharp');
+const { UserInputError } = require('apollo-server-micro');
+const uploadFileToS3 = require('../../s3');
 
 async function uploadMedia(upload) {
   const { file, fileType, size } = upload;
   if (size > 1000) {
-    throw new UserInputError("Media too large. Try resizing");
+    throw new UserInputError('Media too large. Try resizing');
   }
   const { createReadStream, filename } = await file;
   const stream = createReadStream();
-  if (fileType === "IMAGE") {
+  if (fileType === 'IMAGE') {
     const resizer = sharp()
       .resize({ width: 400 })
       .png();
     const resizedImage = await stream.pipe(resizer);
-    const upload = await uploadFileToS3(resizedImage, `${filename}`);
-    return upload.Location;
-  } else if (fileType === "VIDEO") {
-    const upload = await uploadFileToS3(stream, `${filename}`);
-    return upload.Location;
+    const s3upload = await uploadFileToS3(resizedImage, `${filename}`);
+    return s3upload.Location;
   }
-  throw new Error("Error uploading media");
+  if (fileType === 'VIDEO') {
+    const s3upload = await uploadFileToS3(stream, `${filename}`);
+    return s3upload.Location;
+  }
+  throw new Error('Error uploading media');
 }
 
 module.exports.default = uploadMedia;

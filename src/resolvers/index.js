@@ -1,11 +1,11 @@
-const Mutation = require("../mutations");
-const Query = require("../queries");
-const Subscription = require("../subscriptions");
+const Mutation = require('../mutations');
+const Query = require('../queries');
+const Subscription = require('../subscriptions');
 
 const resolvers = {
-  Query: Query,
-  Mutation: Mutation,
-  Subscription: Subscription
+  Query,
+  Mutation,
+  Subscription,
 };
 
 module.exports = { resolvers };

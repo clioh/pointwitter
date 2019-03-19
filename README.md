@@ -4,7 +4,7 @@
 
 ## Overview
 
-This API has been hosted on Zeit's now platform. It can be found @ [pointwitter.clioharper.xyz](https://pointwitter.clioharper.xyz). Navigating there will allow you to use the GraphQL Playground and interact with the API in that manner. Introspection is also enabled for the purposes of this demo. You can navigate to the GraphQL and get a visual understanding of the API schema.
+This API has been hosted on Zeit's now platform. It can be found @ [pointwitter.clioharper.xyz](https://pointwitter.clioharper.xyz). Navigating there will allow you to use the GraphQL Playground and interact with the API in that manner. Introspection is also enabled for the purposes of this demo.
 
 ## Local Development
 
@@ -12,17 +12,15 @@ To run the project locally, first clone the repository with:
 
 `git clone https://github.com/harpe116/pointwitter.git`
 
-You'll need to have Node installed along with either `npm` or `yarn`
-
-Run `yarn install` to install all dependencies for the project.
+You'll need to have Node installed along with `yarn`. After cloning the project, run `yarn install` to install dependencies
 
 From there, you can run `yarn dev` to run the development server with hot reloading or you can run `yarn start` to start the server in production mode. The server is currently configured to expose the GraphQL playground in both modes.
 
 ### Note
 
-Most endpoints for this API are protected. To access them, you'll need to include a token in the `Authorization` header or the request
+Most endpoints for this API are protected. To access them, you'll need to include a token in the `Authorization` header or the request.
 
-To obtain a token, you'll need to either register or login. You can take the token you receive and include it in the header. See below for more details.
+To obtain a token, you'll need to either register through the `signup` mutation or login with the `login` mutation and ask for a token back. You can take the token you receive and include it in the header. See below for more details.
 
 ## API endpoints
 
@@ -31,7 +29,7 @@ The API is configured to accept requests on the `/` endpoint.
 
 ## GraphQL endpoints
 
-_The GraphQL endpoints are as follows_
+_The GraphQL endpoints are as follows._
 
 ### Queries
 
@@ -42,7 +40,7 @@ Returns all the posts made by a user. Does not require authorization.
 ##### Example
 
     query {
-      posts(userID:"cjtc821yk17fv0b5142wl7kuf") {
+      posts(userID: "cjtc821yk17fv0b5142wl7kuf") {
         id
         body
       }
@@ -72,7 +70,7 @@ Returns all posts from the users that a user is following.
 Allows a user to register for an account with an email/password OR phoneNumber/password.
 
     mutation{
-      signup(email:"clio.harper@gmail.com", password:"password") {
+      signup(email: "clio.harper@gmail.com", password: "password") {
         token
         user{
           email
@@ -83,7 +81,7 @@ Allows a user to register for an account with an email/password OR phoneNumber/p
 **OR**
 
     mutation{
-      signup(phoneNumber:"5127884342", password:"password") {
+      signup(phoneNumber: "5127884342", password: "password") {
         token
         user{
           email
@@ -98,18 +96,16 @@ Allows a user to login with previously registered credentials.
 ##### Example
 
     mutation{
-      login(email:"clio.harper@gmail.com", password:"password") {
+      login(email: "clio.harper@gmail.com", password: "password") {
         token
-
       }
     }
 
 **OR**
 
     mutation{
-      login(phoneNumber:"5127884342", password:"password") {
+      login(phoneNumber: "5127884342", password: "password") {
         token
-
       }
     }
 
@@ -125,6 +121,8 @@ _Requires authorization._
       logout
     }
 
+**Reminder: Many of the following endpoints require a JWT that should be included in the Authorization. This is accomplished in the graphQL Playground by clicking on `HTTP HEADERS` on the bottom left and including: {"Authorization": "mytoken"}**
+
 #### CreatePost
 
 Creates a post authored by the user indicated by the token provided.
@@ -134,7 +132,7 @@ _Requires authorization._
 ##### Example
 
     mutation {
-      createPost(postBody:"hello world") {
+      createPost(postBody: "hello world") {
         id
       }
     }
@@ -148,7 +146,7 @@ _Requires authorization._
 ##### Example
 
     mutation {
-      updatePost(postUpdate:"goodbye cruel world", postID:"cjtcins7gsd80b76gq1xj138") {
+      updatePost(postUpdate:"goodbye cruel world", postID: "cjtcins7gsd80b76gq1xj138") {
         id
       }
     }
@@ -162,7 +160,7 @@ _Requires authorization._
 ##### Example
 
     mutation {
-      deletePost(postID:"cjtcins7g3sd80b76gq1xj138") {
+      deletePost(postID: "cjtcins7g3sd80b76gq1xj138") {
         id
       }
     }
@@ -176,7 +174,7 @@ _Requires authorization._
 ##### Example
 
     mutation {
-      followUser(userID:"cjtdh9c3a89og0b511z2zoxic") {
+      followUser(userID: "cjtdh9c3a89og0b511z2zoxic") {
         id
       }
     }
@@ -190,7 +188,7 @@ _Requires authorization._
 ##### Example
 
     mutation {
-      unfollowUser(userID:"cjtciga46213g0b51ls8xc00f") {
+      unfollowUser(userID: "cjtciga46213g0b51ls8xc00f") {
         id
       }
     }
@@ -199,7 +197,7 @@ _Requires authorization._
 
 #### PostAdded
 
-Listens for posts added by anyone the user if following.
+Listens for posts added by anyone the user is following.
 
 _Requires authorization._
 
@@ -214,11 +212,13 @@ _Requires authorization._
 
 ## Approach
 
+Note: While these are the choices I've made for the projects, I would consider them to be strong opinions, weakly held. I'm constantly developing as an engineer and reading and learning about new approaches and the relative tradeoffs.
+
 ### Apollo Server
 
 Apollo Server is the server-side service maintained by Apollo, who is undoubtedly a leader in the graphQL revolution. I like Apollo Server because it easily integrates with the client side offerings that Apollo has as well. Furthermore, it lets me easily choose the framework I want to use, which in this case is Micro. More on that below.
 
-Apollo offers thorough documentation, which helps significantly, and it widely used by the community at large, meaning it is unlike to disappear in the next few years.
+Apollo offers thorough documentation, which helps significantly, and it widely used by the community at large, meaning it is unlikely to disappear in the next few years.
 
 The other tempting alternative to Apollo would be graphQL Yoga, which is maintained by Prisma. graphQL Yoga offers much the same thing in a slightly more opinionated framework. One of the disadvantages of it is that it requires you to use Express.
 
@@ -232,13 +232,13 @@ In this application, JWT's don't really confer any advantages. Their promise is 
 
 ### Prisma
 
-Prisma is definitely the future of databases for common applications. It's a graphQL ORM+ that allows you to bring your own database. The details behind this database are at the individuals discretion, which makes the framework flexible enough to scale relatively painlessly. In this case, I'm taking advantage of Prisma's own hosted database to remove the complications of spinning up my own. If I were to productionize this app, this would be removed before deployment.
+Prisma seems like the future of databases for common applications. It's a graphQL ORM+ that allows you to bring your own database. The details behind this database are at the individuals discretion, which makes the framework flexible enough to scale relatively painlessly. In this case, I'm taking advantage of Prisma's own hosted database to remove the complications of spinning up my own. If I were to productionize this app, this would be removed before deployment.
 
 ## Improvements
 
 ### Reset password functionality
 
-When I was writing this app, I thought it would be more fun to create my own login functionality as opposed to using something out of the box. One of the piece of functionality that is missing is the ability to reset a forgotten password, which is pretty common. In order to do this, I'd need to add a password reset token to the user type and integrate and email and text message service, which would be not too difficult.
+When I was writing this app, I thought it would be more fun to create my own login functionality as opposed to using something out of the box. One of the pieces of functionality that is missing is the ability to reset a forgotten password, which is pretty common. In order to do this, I'd need to add a password reset token to the user type and integrate and email and text message service, which would be not too difficult.
 
 ### Rate limiting
 

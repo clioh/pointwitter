@@ -152,7 +152,7 @@ const Mutation = {
     pubsub.publish(POST_ADDED, {
       postAdded: { ...post, user: { id: userID } },
     });
-    return post;
+    return { ...post, postedBy: userID };
   },
   async updatePost(_, { postUpdate, uploadUpdate, postID }, context) {
     const { prisma } = context;
@@ -181,10 +181,12 @@ const Mutation = {
       });
     }
 
-    return prisma.updatePost({
+    const post = await prisma.updatePost({
       where: { id: postID },
       data: { body: postUpdate },
     });
+
+    return { postedBy: userID, ...post };
   },
   async deletePost(_, { postID }, context) {
     const { prisma } = context;

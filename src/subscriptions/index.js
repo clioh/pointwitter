@@ -12,9 +12,7 @@ const Subscriptions = {
       (payload, variables, { connection }) => {
         const { context } = connection;
         const { following } = context;
-        return !!following.find(
-          person => person.id === payload.postAdded.user.id,
-        );
+        return !!following.find(person => person.id === payload.postAdded.postedBy);
       },
     ),
   },

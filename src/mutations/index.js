@@ -150,7 +150,7 @@ const Mutation = {
       user: { connect: { id: userID } },
     });
     pubsub.publish(POST_ADDED, {
-      postAdded: { ...post, user: { id: userID } },
+      postAdded: { ...post, postedBy: userID },
     });
     return { ...post, postedBy: userID };
   },

@@ -24,4 +24,4 @@ async function uploadMedia(upload) {
   throw new Error('Error uploading media');
 }
 
-module.exports.default = uploadMedia;
+module.exports = { uploadMedia };

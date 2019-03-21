@@ -1,7 +1,11 @@
 require('dotenv').config();
 const { ApolloServer, AuthenticationError } = require('apollo-server-micro');
 const micro = require('micro');
-const { router, get, post } = require('microrouter');
+const { send } = require('micro');
+const cors = require('micro-cors')();
+const {
+  router, get, post, options,
+} = require('microrouter');
 const { PubSub } = require('apollo-server');
 
 const { prisma } = require('../generated/prisma-client');
@@ -46,9 +50,22 @@ const server = new ApolloServer({
   },
 });
 
+const graphqlOptions = (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Origin, Authorization',
+  );
+  send(res, 200);
+};
+
 const graphqlPath = '/';
-const graphqlHandler = server.createHandler({ path: graphqlPath });
-const routes = router(post(graphqlPath, graphqlHandler), get(graphqlPath, graphqlHandler));
+const graphqlHandler = cors(server.createHandler({ path: graphqlPath }));
+const routes = router(
+  post(graphqlPath, graphqlHandler),
+  get(graphqlPath, graphqlHandler),
+  options(graphqlPath, cors(graphqlOptions)),
+);
 
 const microServer = micro(routes);
 microServer.listen();

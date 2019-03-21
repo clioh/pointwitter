@@ -1,17 +1,17 @@
 const AWS = require('aws-sdk');
 
-const { AWS_ACCESS_KEY_ID, AWS_SECRET_KEY } = process.env;
+const { S3_ACCESS_KEY_ID, S3_SECRET_KEY } = process.env;
 // Configure the AWS environment
 AWS.config.update({
-  accessKeyId: AWS_ACCESS_KEY_ID,
-  secretAccessKey: AWS_SECRET_KEY,
+  accessKeyId: S3_ACCESS_KEY_ID,
+  secretAccessKey: S3_SECRET_KEY,
 });
 
 const s3 = new AWS.S3();
 
 async function uploadFileToS3(stream, filename) {
   const params = {
-    Bucket: process.env.S3_BUCKET,
+    Bucket: 'pointwitter',
     Body: stream,
     Key: `${Date.now()}_${filename}`,
     ACL: 'public-read',

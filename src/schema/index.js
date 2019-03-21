@@ -5,19 +5,17 @@ const typeDefs = gql`
     id: ID!
     name: String
     email: String!
-    password: String!
     phoneNumber: String!
     posts: [Post!]!
     followers: [User!]!
     following: [User!]!
     createdAt: String!
     updatedAt: String!
-    lastLogin: String!
   }
 
   type Post {
     id: ID!
-    user: User!
+    postedBy: ID!
     body: String!
     mediaUrl: String
     createdAt: String!

@@ -137,6 +137,10 @@ _Requires authorization._
       }
     }
 
+##### File uploads
+
+The upload logic takes advantage of multipart streams, which are great for performance but no so great for testing in the playground. There isn't any support for them. As such, I've created a website where you can try them out: [pointwitter-upload.clioharper.xyz](https://pointwitter-upload.clioharper.xyz).
+
 #### UpdatePost
 
 Updates a post previously created by the user.

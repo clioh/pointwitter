@@ -7,8 +7,17 @@ const typeDefs = gql`
     email: String!
     phoneNumber: String!
     posts: [Post!]!
-    followers: [User!]!
-    following: [User!]!
+    followers: [RelationshipFragment!]!
+    following: [RelationshipFragment!]!
+    createdAt: String!
+    updatedAt: String!
+  }
+
+  type RelationshipFragment {
+    id: ID!
+    name: String
+    email: String!
+    phoneNumber: String!
     createdAt: String!
     updatedAt: String!
   }

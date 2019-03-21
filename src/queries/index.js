@@ -52,7 +52,47 @@ const Queries = {
       }
       return { [argKey]: args[argKey] };
     });
-    return prisma.users({ where: { AND: argsArray } });
+    const users = await prisma.users({ where: { AND: argsArray } })
+      .$fragment(`fragment UserWithRelationships on User {
+      id
+      name
+      email
+      phoneNumber
+      posts {
+        id
+        user {
+          id
+        }
+        body
+        mediaUrl
+        createdAt
+        updatedAt
+        deleted
+      }
+      followers {
+        id
+        name
+        email
+        phoneNumber
+        createdAt
+        updatedAt
+      }
+      following {
+        id
+        name
+        email
+        phoneNumber
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }`);
+
+    return users.map(user => ({
+      posts: user.posts.map(post => ({ postedBy: post.user.id, ...post })),
+      ...user,
+    }));
   },
 };
 

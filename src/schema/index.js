@@ -52,8 +52,8 @@ const typeDefs = gql`
     createPost(postBody: String!, upload: MediaUpload): Post!
     updatePost(postID: ID!, postUpdate: String!, uploadUpdate: MediaUpload): Post!
     deletePost(postID: ID!): Post!
-    followUser(userID: ID!): User!
-    unfollowUser(userID: ID!): User!
+    followUser(userID: ID!): ID!
+    unfollowUser(userID: ID!): ID!
   }
 
   type Subscription {

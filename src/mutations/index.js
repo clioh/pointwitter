@@ -226,7 +226,7 @@ const Mutation = {
       });
 
       // First we're going to make this user follow the new userID they've just added
-      return prisma.updateUser({
+      await prisma.updateUser({
         where: { id: requestingUserID },
         data: {
           following: {
@@ -234,6 +234,8 @@ const Mutation = {
           },
         },
       });
+
+      return userID;
     } catch (e) {
       throw new UserInputError('Cannot follow user');
     }
@@ -250,7 +252,7 @@ const Mutation = {
       });
 
       // First we're going to make this user follow the new userID they've just added
-      return prisma.updateUser({
+      await prisma.updateUser({
         where: { id: requestingUserID },
         data: {
           following: {
@@ -258,6 +260,8 @@ const Mutation = {
           },
         },
       });
+
+      return userID;
     } catch (e) {
       throw new UserInputError('Cannot unfollow user');
     }

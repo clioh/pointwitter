@@ -174,9 +174,7 @@ _Requires authorization._
 ##### Example
 
     mutation {
-      followUser(userID: "cjtdh9c3a89og0b511z2zoxic") {
-        id
-      }
+      followUser(userID: "cjtdh9c3a89og0b511z2zoxic")
     }
 
 #### UnfollowUser
@@ -188,9 +186,7 @@ _Requires authorization._
 ##### Example
 
     mutation {
-      unfollowUser(userID: "cjtciga46213g0b51ls8xc00f") {
-        id
-      }
+      unfollowUser(userID: "cjtciga46213g0b51ls8xc00f")
     }
 
 ### Subscriptions

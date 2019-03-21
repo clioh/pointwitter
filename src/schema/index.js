@@ -4,8 +4,8 @@ const typeDefs = gql`
   type User {
     id: ID!
     name: String
-    email: String!
-    phoneNumber: String!
+    email: String
+    phoneNumber: String
     posts: [Post!]!
     followers: [RelationshipFragment!]!
     following: [RelationshipFragment!]!
@@ -34,7 +34,16 @@ const typeDefs = gql`
 
   type AuthPayload {
     token: String
-    user: User
+    user: AuthUserPayload
+  }
+
+  type AuthUserPayload {
+    id: ID!
+    name: String
+    email: String
+    phoneNumber: String
+    createdAt: String!
+    updatedAt: String!
   }
 
   input MediaUpload {

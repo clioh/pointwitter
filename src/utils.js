@@ -8,11 +8,16 @@ async function tokenBlacklisted(prisma, token) {
 }
 
 async function getUserID(context) {
-  const { prisma, req, connectionParams } = context;
+  const {
+    prisma, req, connectionParams, resetToken,
+  } = context;
+
   let Authorization;
   if (!req) {
     const { Authorization: connectionAuth } = connectionParams;
     Authorization = connectionAuth;
+  } else if (resetToken) {
+    Authorization = resetToken;
   } else {
     Authorization = req.headers.authorization;
   }

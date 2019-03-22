@@ -263,11 +263,10 @@ const Mutation = {
     }
   },
   async requestPasswordReset(_, { email }, { prisma }) {
-    /* NOTE: This is a great place to use JWT's as
-    their self contained nature allow you to validate
-    without a lot of effort. It also means that the logic
-    we use to validate requests can be used in the resetPassword function too! */
     const user = await prisma.user({ email });
+    if (!user) {
+      return "If such a user exists, we'll get a reset token to them";
+    }
     const iat = Date.now();
     // We're just going to make tokens valid for 1 hour
     const exp = Date.now() + 1 * 60 * 60 * 1000;
@@ -284,7 +283,7 @@ const Mutation = {
     but setting up SES is outside the scope of this demo,
     so I'll just return it here */
     await sendResetEmail(user.email, token);
-    return 'Success';
+    return "If such a user exists, we'll get a reset token to them";
   },
   async resetPassword(_, { resetToken, newPassword }, context) {
     /* Perhaps we should compare the hash of the

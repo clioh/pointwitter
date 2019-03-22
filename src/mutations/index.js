@@ -2,7 +2,7 @@ const { UserInputError, AuthenticationError } = require('apollo-server-micro');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { APP_SECRET, getUserID } = require('../utils');
-const { uploadMedia } = require('./utils');
+const { uploadMedia, sendResetEmail } = require('./utils');
 
 const POST_ADDED = 'POST_ADDED';
 
@@ -283,7 +283,8 @@ const Mutation = {
     /* In reality, this would be sent in an email,
     but setting up SES is outside the scope of this demo,
     so I'll just return it here */
-    return token;
+    await sendResetEmail(user.email, token);
+    return 'Success';
   },
   async resetPassword(_, { resetToken, newPassword }, context) {
     /* Perhaps we should compare the hash of the

@@ -1,6 +1,10 @@
 const sharp = require('sharp');
 const { UserInputError } = require('apollo-server-micro');
+const sgMail = require('@sendgrid/mail');
+
 const uploadFileToS3 = require('../../s3');
+
+sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 async function uploadMedia(upload) {
   const { file, fileType, size } = upload;
@@ -24,4 +28,17 @@ async function uploadMedia(upload) {
   throw new Error('Error uploading media');
 }
 
-module.exports = { uploadMedia };
+async function sendResetEmail(recipient, resetToken) {
+  const msg = {
+    to: recipient,
+    from: 'clio@clioharper.xyz',
+    subject: 'Your Pointwitter password reset',
+    html: `Hi there! <br /> It looks like you've requested a password reset.
+    If you didn't, please ignore this email.
+    If you did, your token is: <strong>${resetToken}</strong><br />
+    Go ahead and throw that sucker in the resetPassword mutation and we'll get your password reset`,
+  };
+  await sgMail.send(msg);
+}
+
+module.exports = { uploadMedia, sendResetEmail };

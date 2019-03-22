@@ -12,6 +12,7 @@
     "dev": "yarn create-env && micro-dev"
   },
   "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
     "apollo-server": "^2.4.8",
     "apollo-server-micro": "^2.4.8",
     "aws-sdk": "^2.422.0",

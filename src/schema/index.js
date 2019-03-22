@@ -72,7 +72,7 @@ const typeDefs = gql`
     deletePost(postID: ID!): Post!
     followUser(userID: ID!): RelationshipFragment!
     unfollowUser(userID: ID!): RelationshipFragment!
-    requestPasswordReset(email: String!): String!
+    requestPasswordReset(email: String, phoneNumber: String): String!
     resetPassword(resetToken: String!, newPassword: String!): User!
   }
 

@@ -193,6 +193,28 @@ _Requires authorization._
       unfollowUser(userID: "cjtciga46213g0b51ls8xc00f")
     }
 
+#### requestPasswordReset
+
+Allows a user to request to reset his/her password through email or text. When both are supplied, email is preferred.
+
+##### Example
+
+    mutation {
+      requestPasswordReset(phoneNumber: "5127884342")
+    }
+
+#### resetPassword
+
+Resets the password of a user with the token sent through email or text
+
+##### Example
+
+    mutation {
+      resetPassword(resetToken: "xxx", newPassword: "password") {
+        id
+      }
+    }
+
 ### Subscriptions
 
 #### PostAdded
